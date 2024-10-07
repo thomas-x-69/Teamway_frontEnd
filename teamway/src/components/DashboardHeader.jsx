@@ -76,7 +76,7 @@ const DashboardHeader = () => {
       <div className="container mx-auto px-3">
         <div
           className={`bg-white rounded-xl shadow-sm transition-all duration-300 ${
-            isSticky ? "py-2 px-3" : "py-3 px-4 mt-2"
+            isSticky ? "py-1 px-3" : "py-1 pb-2 px-4 mt-2"
           }`}
         >
           <div className="flex items-center">

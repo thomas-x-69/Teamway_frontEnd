@@ -23,6 +23,7 @@ import "./customScrollbar.css";
 import DashboardMessagesWhatsapp from "./pages/DashboardMessagesWhatsapp";
 import DashboardMessagesTemplates from "./pages/DashboardMessagesTemplates";
 import CRMDashboard from "./pages/CRMDashboard";
+import CallsContacts from "./pages/CallsContacts";
 
 const ProtectedRoute = ({ children }) => {
   const { token } = useAuth();
@@ -139,7 +140,7 @@ function AppContent() {
             <ProtectedRoute>
               <DashboardLayout>
                 <Routes>
-                  <Route index element={<DashboardHome />} />
+                  <Route path="home" element={<DashboardHome />} />
                   <Route path="messages" element={<WhatsAppDashboard />} />
                   <Route
                     path="messages/whatsapp"
@@ -150,6 +151,7 @@ function AppContent() {
                     element={<DashboardMessagesTemplates />}
                   />
                   <Route path="calls" element={<CallsDashboard />} />
+                  <Route path="calls/contacts" element={<CallsContacts />} />
                   <Route path="crm" element={<CRMDashboard />} />
                 </Routes>
               </DashboardLayout>

@@ -11,14 +11,16 @@ import {
   User,
 } from "lucide-react";
 import TeamPlus from "../assets/Logo2.png";
-
 const Sidebar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { logout } = useAuth();
 
+  const isActive = (path) => {
+    return location.pathname.startsWith(path);
+  };
   const navItems = [
-    { path: "/dashboard", icon: Home, label: "الرئيسية" },
+    { path: "/dashboard/home", icon: Home, label: "الرئيسية" },
     {
       path: "/dashboard/calls",
       icon: PhoneCall,
@@ -35,11 +37,11 @@ const Sidebar = () => {
   const mobileNavItems = [
     { path: "/dashboard/account", icon: User, label: "الحساب" },
     {
-      path: "/dashboard/messages" || "/dashboard/messages/whatsapp",
+      path: "/dashboard/messages",
       icon: MessageCircleMore,
       label: "الرسائل",
     },
-    { path: "/dashboard", icon: Home, label: "الرئيسية" },
+    { path: "/dashboard/home", icon: Home, label: "الرئيسية" },
     { path: "/dashboard/crm", icon: BriefcaseBusiness, label: "الفريق" },
     { path: "/dashboard/calls", icon: PhoneCall, label: "الاتصالات" },
   ];
@@ -58,7 +60,7 @@ const Sidebar = () => {
           className={`p-2 flex flex-col items-center justify-center rounded-lg relative transition-all duration-300 ${
             isMobile ? "flex-1" : ""
           } ${
-            location.pathname === item.path
+            isActive(item.path)
               ? isMobile
                 ? "text-primary"
                 : "text-white"
@@ -69,7 +71,7 @@ const Sidebar = () => {
             className={`${isMobile ? "w-5 h-5" : "w-6 h-6"} mb-1 z-10`}
           />
           <span className="text-xs text-center z-10">{item.label}</span>
-          {location.pathname === item.path && !isMobile && (
+          {isActive(item.path) && !isMobile && (
             <motion.span
               layoutId="nav-highlight"
               className="absolute inset-0 bg-primary rounded-lg"
@@ -78,7 +80,7 @@ const Sidebar = () => {
               transition={{ type: "spring", stiffness: 500, damping: 30 }}
             />
           )}
-          {location.pathname === item.path && isMobile && (
+          {isActive(item.path) && isMobile && (
             <motion.span
               layoutId="mobile-nav-highlight"
               className="absolute inset-x-0 top-0 h-0.5 bg-primary"

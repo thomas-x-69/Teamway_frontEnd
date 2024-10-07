@@ -1,58 +1,29 @@
-# syntax=docker/dockerfile:1.4
-
-# 1. For build React app
-FROM node:lts AS development
+# Stage 1: Build the React app
+FROM node:18 AS build
 
 # Set working directory
 WORKDIR /app
 
-# 
-COPY package.json /app/package.json
-COPY package-lock.json /app/package-lock.json
+# Copy package.json and package-lock.json
+COPY package*.json ./
 
-# Same as npm install
-RUN npm ci
+# Install dependencies
+RUN npm install
 
-COPY . /app
+# Copy the rest of the app's source code
+COPY . .
 
-ENV CI=true
-ENV PORT=3000
-
-CMD [ "npm", "start" ]
-
-FROM development AS build
-
+# Build the React app for production (ensure it outputs to /app/dist)
 RUN npm run build
 
-
-FROM development as dev-envs
-RUN <<EOF
-apt-get update
-apt-get install -y --no-install-recommends git
-EOF
-
-RUN <<EOF
-useradd -s /bin/bash -m vscode
-groupadd docker
-usermod -aG docker vscode
-EOF
-# install Docker tools (cli, buildx, compose)
-COPY --from=gloursdocker/docker / /
-CMD [ "npm", "start" ]
-
-# 2. For Nginx setup
+# Stage 2: Serve the React app with Nginx
 FROM nginx:alpine
 
-# Copy config nginx
-COPY --from=build /app/.nginx/nginx.conf /etc/nginx/conf.d/default.conf
+# Copy the build output from the previous stage to Nginx's HTML folder
+COPY --from=build /app/dist /usr/share/nginx/html
 
-WORKDIR /usr/share/nginx/html
+# Expose the port that the container will listen on
+EXPOSE 80
 
-# Remove default nginx static assets
-RUN rm -rf ./*
-
-# Copy static assets from builder stage
-COPY --from=build /app/build .
-
-# Containers run nginx with global directives and daemon off
-ENTRYPOINT ["nginx", "-g", "daemon off;"]
+# Start Nginx server
+CMD ["nginx", "-g", "daemon off;"]

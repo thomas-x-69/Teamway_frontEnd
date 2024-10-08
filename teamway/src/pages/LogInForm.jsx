@@ -22,7 +22,7 @@ const LogInForm = () => {
 
     try {
       const response = await fetch(
-        "web/api/Authentication/login",
+        "http://web/api/Authentication/login",
         {
           method: "POST",
           headers: {

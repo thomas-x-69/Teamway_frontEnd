@@ -22,7 +22,7 @@ const LogInForm = () => {
 
     try {
       const response = await fetch(
-        "https://teamwayserver20240830213215.azurewebsites.net/api/Authentication/login",
+        "web/api/Authentication/login",
         {
           method: "POST",
           headers: {

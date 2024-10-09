@@ -22,7 +22,7 @@ const LogInForm = () => {
 
     try {
       const response = await fetch(
-        "http://152.53.109.176:8000/api/Authentication/login",
+        "https://api_backend.randomsite.link/api/Authentication/login",
         {
           method: "POST",
           headers: {

@@ -19,7 +19,7 @@ const LogInForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-
+  
     try {
       const response = await fetch(
         "https://api_backend.randomsite.link/api/Authentication/login",
@@ -29,15 +29,16 @@ const LogInForm = () => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({ username, password }),
+          mode: 'no-cors', // Add this line to disable CORS checks
         }
       );
-
+  
       if (!response.ok) {
         throw new Error("Login failed");
       }
-
-      const data = await response.json();
-      login(data.token); // Save token using the login function from AuthContext
+  
+      const data = await response.text(); // Use response.text() instead of response.json()
+      login(data); // Save token using the login function from AuthContext
       navigate("/dashboard");
     } catch (err) {
       setError("تعذر تسجيل الدخول");
